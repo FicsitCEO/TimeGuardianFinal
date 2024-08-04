@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: flask_cookies
+Version: 0.0.1
+Summary: Easily install a cookie banner working with Google Tag Manager in your Flask application
+Project-URL: Homepage, https://github.com/cccnrc/flask-cookies
+Project-URL: Issues, https://github.com/cccnrc/flask-cookies/issues
+Author-email: Enrico Cocchi <cocchi.e89@gmail.com>
+License-File: LICENSE
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+# Flask Cookies
+
+This program allows you to easily implement a cookie banner able to work with
+Google Tag Manager in your Flask application.

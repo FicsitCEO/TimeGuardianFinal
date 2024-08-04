@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Redigera arbetstid{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2>Redigera arbetstid</h2>
+    <form method="POST" action="{{ url_for('edit_timestamp', timestamp_id=timestamp.id) }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="clock_in">Checka in:</label>
+            <input type="datetime-local" name="clock_in" value="{{ timestamp.clock_in.strftime('%Y-%m-%dT%H:%M') }}"
+                class="form-control">
+            {% if form.clock_in.errors %}
+            <ul class="error">
+                {% for error in form.clock_in.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="clock_out">Checka ut:</label>
+            <input type="datetime-local" name="clock_out" value="{{ timestamp.clock_out.strftime('%Y-%m-%dT%H:%M') }}"
+                class="form-control">
+            {% if form.clock_out.errors %}
+            <ul class="error">
+                {% for error in form.clock_out.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="break_duration">Rastens varaktighet:</label>
+            {{ form.break_duration(class="form-control") }}
+            {% if form.break_duration.errors %}
+            <ul class="error">
+                {% for error in form.break_duration.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="lunch_duration">Lunchens varaktighet:</label>
+            {{ form.lunch_duration(class="form-control") }}
+            {% if form.lunch_duration.errors %}
+            <ul class="error">
+                {% for error in form.lunch_duration.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Uppdatera arbetstid</button>
+            <a href="{{ url_for('view_times', worker_id=timestamp.user_id) }}" class="btn btn-secondary">Tillbaka till
+                tider</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

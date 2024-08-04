@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Tider för {{ worker.first_name }} {{ worker.last_name }}</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Time Worked</th>
+            <th>Break Duration</th>
+            <th>Lunch Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for timestamp in timestamps %}
+        <tr>
+            <td>{{ timestamp.clock_in.strftime('%Y-%m-%d') }}</td>
+            <td>{{ timestamp.clock_in.strftime('%H:%M') }}</td>
+            <td>{{ timestamp.clock_out.strftime('%H:%M') if timestamp.clock_out else '' }}</td>
+            <td>
+                {% if timestamp.clock_out %}
+                {{ (timestamp.clock_out - timestamp.clock_in).seconds|format_worked_hours }}
+                {% endif %}
+            </td>
+            <td>{{ timestamp.break_duration }} mins</td>
+            <td>{{ timestamp.lunch_duration }} mins</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Tillbaka</a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Hem{% endblock %}
+{% block content %}
+<h2>Välkommen till Time Guardian</h2>
+<p>Hantera dina arbetstider och semesterförfrågningar enkelt och smidigt.</p>
+{% if current_user.is_authenticated %}
+<p>Du är inloggad som {{ current_user.first_name }} {{ current_user.last_name }}.</p>
+<a href="{{ url_for('logout') }}" class="main-button">Logga ut</a>
+{% if current_user.role == 'master' %}
+<a href="{{ url_for('master_dashboard') }}" class="main-button">Master Dashboard</a>
+{% elif current_user.role == 'admin' %}
+<a href="{{ url_for('admin_dashboard') }}" class="main-button">Admin Dashboard</a>
+{% elif current_user.role == 'worker' %}
+<a href="{{ url_for('worker_dashboard') }}" class="main-button">Arbetarpanel</a>
+{% endif %}
+{% else %}
+<a href="{{ url_for('login') }}" class="main-button">Logga in</a>
+<a href="{{ url_for('register') }}" class="main-button">Registrera</a>
+{% endif %}
+{% endblock %}

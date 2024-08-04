@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Admin Dashboard</h2>
+
+    <div class="section">
+        <h3>Uppdatera admin kod</h3>
+        <form method="POST" action="{{ url_for('admin_dashboard') }}">
+            {{ update_admin_code_form.hidden_tag() }}
+            <div class="form-group">
+                <label for="new_admin_code">Ny admin kod:</label>
+                {{ update_admin_code_form.new_admin_code(class="form-control") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Uppdatera admin kod</button>
+        </form>
+        <p>Aktuell admin kod: {{ admin_code }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Arbetare</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Förnamn</th>
+                    <th>Efternamn</th>
+                    <th>Åtgärder</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for worker in workers %}
+                <tr>
+                    <td>{{ worker.first_name }}</td>
+                    <td>{{ worker.last_name }}</td>
+                    <td>
+                        <a href="{{ url_for('view_times', worker_id=worker.id) }}" class="btn btn-primary">Visa
+                            tider</a>
+                        <form method="POST" action="{{ url_for('delete_worker', worker_id=worker.id) }}"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Ta bort</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Semesterförfrågningar</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Startdatum</th>
+                    <th>Slutdatum</th>
+                    <th>Status</th>
+                    <th>Åtgärder</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vacation in vacations %}
+                <tr>
+                    <td>{{ vacation.start_date }}</td>
+                    <td>{{ vacation.end_date }}</td>
+                    <td>{{ 'Godkänd' if vacation.status == 'approved' else 'Nekad' if vacation.status == 'declined' else
+                        'Pågående' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('approve_vacation') }}" style="display:inline;">
+                            <input type="hidden" name="vacation_id" value="{{ vacation.id }}">
+                            <button type="submit" class="btn btn-primary">Godkänn</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('decline_vacation') }}" style="display:inline;">
+                            <input type="hidden" name="vacation_id" value="{{ vacation.id }}">
+                            <button type="submit" class="btn btn-danger">Neka</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Geofences</h3>
+        <form method="POST" action="{{ url_for('admin_dashboard') }}">
+            {{ geofence_form.hidden_tag() }}
+            <div class="form-group">
+                <label for="latitude">Latitude:</label>
+                {{ geofence_form.latitude(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="longitude">Longitude:</label>
+                {{ geofence_form.longitude(class="form-control") }}
+            </div>
+            <div class="form-group">
+                <label for="radius">Radius (meter):</label>
+                {{ geofence_form.radius(class="form-control") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Lägg till geofence</button>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Radius</th>
+                    <th>Åtgärder</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for geofence in geofences %}
+                <tr>
+                    <td>{{ geofence.latitude }}</td>
+                    <td>{{ geofence.longitude }}</td>
+                    <td>{{ geofence.radius }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('delete_geofence', geofence_id=geofence.id) }}"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Ta bort</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

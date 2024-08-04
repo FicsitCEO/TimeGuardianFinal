@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Master Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-container">
+    <h2>Master Dashboard</h2>
+
+    <div class="section">
+        <h3>Lägg till administratör</h3>
+        <form method="POST" action="{{ url_for('master_dashboard') }}">
+            <input type="hidden" name="action" value="add">
+            <div class="form-group">
+                <label for="first_name">Förnamn:</label>
+                <input type="text" name="first_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Efternamn:</label>
+                <input type="text" name="last_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Lösenord:</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="admin_code">Admin kod:</label>
+                <input type="text" name="admin_code" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success">Lägg till admin</button>
+        </form>
+    </div>
+
+    <div class="section">
+        <h3>Administratörer</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Förnamn</th>
+                    <th>Efternamn</th>
+                    <th>Åtgärder</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for admin in admins %}
+                <tr>
+                    <td>{{ admin.first_name }}</td>
+                    <td>{{ admin.last_name }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('master_dashboard') }}" style="display:inline;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="admin_id" value="{{ admin.id }}">
+                            <button type="submit" class="btn btn-danger">Ta bort</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Arbetarens Kontrollpanel</h1>
+
+{% if clocked_in %}
+<form method="POST">
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    <div class="form-group">
+        <label for="break_duration">Rasttid (minuter):</label>
+        <input type="number" class="form-control" id="break_duration" name="break_duration">
+    </div>
+    <div class="form-group">
+        <label for="lunch_duration">Lunchtid (minuter):</label>
+        <input type="number" class="form-control" id="lunch_duration" name="lunch_duration">
+    </div>
+    <button type="submit" name="action" value="clock_out" class="btn btn-danger">Checka Ut</button>
+</form>
+{% else %}
+<form method="POST">
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    <button type="submit" name="action" value="clock_in" class="btn btn-success">Checka In</button>
+</form>
+{% endif %}
+
+<h2>Tidsstämplar</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Incheckning</th>
+            <th>Utcheckning</th>
+            <th>Arbetad Tid</th>
+            <th>Rasttid</th>
+            <th>Lunchtid</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for timestamp in timestamps %}
+        <tr>
+            <td>{{ timestamp.clock_in.strftime('%Y-%m-%d') }}</td>
+            <td>{{ timestamp.clock_in.strftime('%H:%M') }}</td>
+            <td>{{ timestamp.clock_out.strftime('%H:%M') if timestamp.clock_out else '' }}</td>
+            <td>
+                {% if timestamp.clock_out %}
+                {{ (timestamp.clock_out - timestamp.clock_in).seconds|format_worked_hours }}
+                {% endif %}
+            </td>
+            <td>{{ timestamp.break_duration }} min</td>
+            <td>{{ timestamp.lunch_duration }} min</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Semesteransökningar</h2>
+<form method="POST" action="{{ url_for('request_vacation') }}">
+    {{ vacation_form.hidden_tag() }}
+    <div class="form-group">
+        {{ vacation_form.start_date.label(class="form-control-label") }}
+        {{ vacation_form.start_date(class="form-control", type="date") }}
+    </div>
+    <div class="form-group">
+        {{ vacation_form.end_date.label(class="form-control-label") }}
+        {{ vacation_form.end_date(class="form-control", type="date") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Ansök om Semester</button>
+</form>
+
+<h2>Semesterstatus</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Startdatum</th>
+            <th>Slutdatum</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vacation in vacations %}
+        <tr>
+            <td>{{ vacation.start_date }}</td>
+            <td>{{ vacation.end_date }}</td>
+            <td>{{ vacation.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+        });
+    } else {
+        alert("Geolocation stöds inte av denna webbläsare.");
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,258 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.error p {
+    color: red;
+    margin: 0;
+}
+
+button.btn {
+    background-color: orange;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+button.btn:hover,
+a.btn:hover {
+    background-color: rgb(223, 122, 0);
+}
+
+a.btn {
+    background-color: orange;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+button.btn-primary {
+    background-color: orange;
+    color: black;
+    border: none;
+}
+
+button.btn-primary:hover {
+    background-color: darkorange;
+}
+
+button.btn-secondary {
+    background-color: orange;
+    color: black;
+    border: none;
+}
+
+button.btn-secondary:hover {
+    background-color: darkorange;
+}
+
+button.btn-success {
+    background-color: orange;
+    color: black;
+    border: none;
+}
+
+button.btn-success:hover {
+    background-color: darkorange;
+}
+
+button.btn-danger {
+    background-color: orange;
+    color: black;
+    border: none;
+}
+
+button.btn-danger:hover {
+    background-color: darkorange;
+}
+
+.main-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: 2px solid orange;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    background-color: #fff;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.main-button:hover {
+    background-color: orange;
+    border-color: darkorange;
+    color: black;
+}
+
+.dashboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.admin-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.admin-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 200px;
+}
+
+.admin-card h4 {
+    margin: 0 0 10px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.flashes .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flashes .danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.view-times-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* Add this at the end of your existing CSS */
+.button-group {
+    display: flex;
+    gap: 10px;
+    /* Adjust the gap as needed */
+}
