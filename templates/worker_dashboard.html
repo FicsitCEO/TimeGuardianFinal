@@ -17,7 +17,7 @@
     <button type="submit" name="action" value="clock_out" class="btn btn-danger">Checka Ut</button>
 </form>
 {% else %}
-<form method="POST">
+<form method="POST" id="clock_in_form">
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
     <button type="submit" name="action" value="clock_in" class="btn btn-success">Checka In</button>
@@ -89,13 +89,21 @@
 </table>
 
 <script>
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            document.getElementById('latitude').value = position.coords.latitude;
-            document.getElementById('longitude').value = position.coords.longitude;
-        });
-    } else {
-        alert("Geolocation stöds inte av denna webbläsare.");
-    }
+    document.getElementById('clock_in_form').addEventListener('submit', function (event) {
+        if (navigator.geolocation) {
+            event.preventDefault();
+            navigator.geolocation.getCurrentPosition(function (position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+                document.getElementById('clock_in_form').submit();
+            }, function (error) {
+                alert("Geolocation request denied.");
+                document.getElementById('clock_in_form').submit();
+            });
+        } else {
+            alert("Geolocation stöds inte av denna webbläsare.");
+            document.getElementById('clock_in_form').submit();
+        }
+    });
 </script>
 {% endblock %}

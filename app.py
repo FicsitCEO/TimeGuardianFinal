@@ -169,7 +169,9 @@ def admin_dashboard():
     geofences = Geofence.query.filter_by(admin_id=current_user.id).all()
     print(f"Geofences in admin_dashboard: {geofences}")
 
-    return render_template('admin_dashboard.html', title='Admin Dashboard', workers=workers, vacations=vacations, update_admin_code_form=update_admin_code_form, geofence_form=geofence_form, geofences=geofences, admin_code=current_user.admin_code)
+    timestamps = Timestamp.query.filter(Timestamp.user_id.in_([worker.id for worker in workers])).order_by(Timestamp.clock_in.desc()).all()
+
+    return render_template('admin_dashboard.html', title='Admin Dashboard', workers=workers, vacations=vacations, update_admin_code_form=update_admin_code_form, geofence_form=geofence_form, geofences=geofences, admin_code=current_user.admin_code, timestamps=timestamps)
 
 @app.route('/view_times/<int:worker_id>', methods=['GET', 'POST'])
 @login_required
@@ -182,7 +184,7 @@ def view_times(worker_id):
         flash('Ogiltig arbetare eller otillräcklig åtkomst', 'danger')
         return redirect(url_for('admin_dashboard'))
 
-    timestamps = Timestamp.query.filter_by(user_id=worker_id).all()
+    timestamps = Timestamp.query.filter_by(user_id=worker_id).order_by(Timestamp.clock_in.desc()).all()
     return render_template('view_times.html', title=f'Tider för {worker.first_name} {worker.last_name}', worker=worker, timestamps=timestamps)
 
 @app.route('/approve_vacation', methods=['POST'])
@@ -300,7 +302,7 @@ def worker_dashboard():
             if not clock_in_allowed:
                 flash('Du är för långt från tillåtet område för att checka in.', 'danger')
 
-    timestamps = Timestamp.query.filter_by(user_id=current_user.id).all()
+    timestamps = Timestamp.query.filter_by(user_id=current_user.id).order_by(Timestamp.clock_in.desc()).all()
     vacations = Vacation.query.filter_by(user_id=current_user.id).all()
 
     return render_template('worker_dashboard.html', title='Worker Dashboard', vacation_form=vacation_form, clocked_in=clocked_in, timestamps=timestamps, vacations=vacations)

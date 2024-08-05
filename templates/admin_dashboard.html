@@ -47,6 +47,40 @@
     </div>
 
     <div class="section">
+        <h3>Tidsstämplar</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Förnamn</th>
+                    <th>Efternamn</th>
+                    <th>Incheckning</th>
+                    <th>Utcheckning</th>
+                    <th>Arbetad Tid</th>
+                    <th>Rasttid</th>
+                    <th>Lunchtid</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for timestamp in timestamps %}
+                <tr>
+                    <td>{{ timestamp.user.first_name }}</td>
+                    <td>{{ timestamp.user.last_name }}</td>
+                    <td>{{ timestamp.clock_in.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ timestamp.clock_out.strftime('%Y-%m-%d %H:%M') if timestamp.clock_out else '' }}</td>
+                    <td>
+                        {% if timestamp.clock_out %}
+                        {{ (timestamp.clock_out - timestamp.clock_in).seconds|format_worked_hours }}
+                        {% endif %}
+                    </td>
+                    <td>{{ timestamp.break_duration }} min</td>
+                    <td>{{ timestamp.lunch_duration }} min</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
         <h3>Semesterförfrågningar</h3>
         <table class="table">
             <thead>
@@ -119,38 +153,6 @@
                             <button type="submit" class="btn btn-danger">Ta bort</button>
                         </form>
                     </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section">
-        <h3>Tidsstämplar</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Datum</th>
-                    <th>Incheckning</th>
-                    <th>Utcheckning</th>
-                    <th>Arbetad Tid</th>
-                    <th>Rasttid</th>
-                    <th>Lunchtid</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for timestamp in timestamps %}
-                <tr>
-                    <td>{{ timestamp.clock_in.strftime('%Y-%m-%d') }}</td>
-                    <td>{{ timestamp.clock_in.strftime('%H:%M') }}</td>
-                    <td>{{ timestamp.clock_out.strftime('%H:%M') if timestamp.clock_out else '' }}</td>
-                    <td>
-                        {% if timestamp.clock_out %}
-                        {{ (timestamp.clock_out - timestamp.clock_in).seconds|format_worked_hours }}
-                        {% endif %}
-                    </td>
-                    <td>{{ timestamp.break_duration }} min</td>
-                    <td>{{ timestamp.lunch_duration }} min</td>
                 </tr>
                 {% endfor %}
             </tbody>
