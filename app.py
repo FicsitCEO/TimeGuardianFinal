@@ -36,6 +36,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(10), nullable=False)
     admin_code = db.Column(db.String(255), nullable=True)
+    
+    timestamps = db.relationship('Timestamp', backref='user', lazy=True)
+
 
 class Timestamp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
