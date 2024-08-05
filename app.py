@@ -248,54 +248,37 @@ def worker_dashboard():
 
     if request.method == 'POST':
         if clocked_in:
-            # Log clock out details
-            print(f"Clocking out: user_id={current_user.id}, timestamp_id={clocked_in.id}, clock_out_time={datetime.utcnow()}")
             clocked_in.clock_out = datetime.utcnow()
             clocked_in.lunch_duration = request.form.get('lunch_duration', type=int, default=0)
             clocked_in.break_duration = request.form.get('break_duration', type=int, default=0)
             db.session.commit()
             flash('Du har nu checkat ut.', 'success')
+            clocked_in = None  # Update clocked_in to reflect the new state
         else:
             lat = request.form.get('latitude')
             lon = request.form.get('longitude')
-
-            # Log received coordinates
-            print(f"Received coordinates: lat={lat}, lon={lon}")
 
             if not lat or not lon:
                 flash('Misslyckades med att hämta platsinformation. Vänligen försök igen.', 'danger')
                 return redirect(url_for('worker_dashboard'))
 
             user_location = (float(lat), float(lon))
-            print(f"Current user location: lat={lat}, lon={lon}")
 
-            # Retrieve the worker's admin
             worker_admin = User.query.filter_by(admin_code=current_user.admin_code, role='admin').first()
             if not worker_admin:
                 flash('Ingen administratör hittades för att kontrollera geofences.', 'danger')
                 return redirect(url_for('worker_dashboard'))
 
-            print(f"Worker's admin_id: {worker_admin.id}")
-
             geofences = Geofence.query.filter_by(admin_id=worker_admin.id).all()
-            geofence_locations = [(geofence.latitude, geofence.longitude, geofence.radius) for geofence in geofences]
-            print(f"Allowed geofence locations: {geofence_locations}")
-
-            if not geofences:
-                flash('Hemsidan stöttar inte platsbaserade incheckningar.', 'danger')
-                return redirect(url_for('worker_dashboard'))
-
             clock_in_allowed = False
             for geofence in geofences:
                 geofence_location = (geofence.latitude, geofence.longitude)
                 distance = geodesic(user_location, geofence_location).meters
-                print(f"Distance to geofence {geofence.id}: {distance} meters (radius: {geofence.radius} meters)")
                 if distance <= geofence.radius:
                     clock_in_allowed = True
                     new_timestamp = Timestamp(user_id=current_user.id)
                     db.session.add(new_timestamp)
                     db.session.commit()
-                    print(f"Clocking in: user_id={current_user.id}, timestamp_id={new_timestamp.id}")
                     flash('Du har nu checkat in.', 'success')
                     return redirect(url_for('worker_dashboard'))
 
@@ -306,6 +289,7 @@ def worker_dashboard():
     vacations = Vacation.query.filter_by(user_id=current_user.id).all()
 
     return render_template('worker_dashboard.html', title='Worker Dashboard', vacation_form=vacation_form, clocked_in=clocked_in, timestamps=timestamps, vacations=vacations)
+
 
 
 @app.route('/delete_worker/<int:worker_id>', methods=['POST'])

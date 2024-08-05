@@ -14,13 +14,15 @@
         <label for="lunch_duration">Lunchtid (minuter):</label>
         <input type="number" class="form-control" id="lunch_duration" name="lunch_duration">
     </div>
-    <button type="submit" name="action" value="clock_out" class="btn btn-danger">Checka Ut</button>
+    <button type="submit" name="action" value="clock_out" class="btn btn-danger" onclick="getLocation()">Checka
+        Ut</button>
 </form>
 {% else %}
-<form method="POST" id="clock_in_form">
+<form method="POST">
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
-    <button type="submit" name="action" value="clock_in" class="btn btn-success">Checka In</button>
+    <button type="submit" name="action" value="clock_in" class="btn btn-success" onclick="getLocation()">Checka
+        In</button>
 </form>
 {% endif %}
 
@@ -89,21 +91,18 @@
 </table>
 
 <script>
-    document.getElementById('clock_in_form').addEventListener('submit', function (event) {
+    function getLocation() {
         if (navigator.geolocation) {
-            event.preventDefault();
             navigator.geolocation.getCurrentPosition(function (position) {
                 document.getElementById('latitude').value = position.coords.latitude;
                 document.getElementById('longitude').value = position.coords.longitude;
-                document.getElementById('clock_in_form').submit();
-            }, function (error) {
-                alert("Geolocation request denied.");
-                document.getElementById('clock_in_form').submit();
             });
         } else {
             alert("Geolocation stöds inte av denna webbläsare.");
-            document.getElementById('clock_in_form').submit();
         }
-    });
+    }
+
+    // Always call getLocation to ensure location prompt
+    getLocation();
 </script>
 {% endblock %}
