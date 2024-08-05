@@ -25,13 +25,6 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    @app.before_request
-    def before_request():
-        """Redirect all HTTP requests to HTTPS"""
-        if not request.is_secure and not app.debug:
-            url = request.url.replace("http://", "https://", 1)
-            return redirect(url, code=301)
-
     return app
 
 app = create_app()
@@ -71,6 +64,7 @@ class Geofence(db.Model):
     radius = db.Column(db.Float, nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+# Register the custom filter with Jinja2
 @app.template_filter('format_worked_hours')
 def format_worked_hours(seconds):
     hours, remainder = divmod(seconds, 3600)
@@ -188,7 +182,7 @@ def view_times(worker_id):
         flash('Ogiltig arbetare eller otillräcklig åtkomst', 'danger')
         return redirect(url_for('admin_dashboard'))
 
-    timestamps = Timestamp.query.filter_by(user_id=worker_id).order_by(Timestamp.clock_in.desc()).all()
+    timestamps = Timestamp.query.filter_by(user_id=worker_id).all()
     return render_template('view_times.html', title=f'Tider för {worker.first_name} {worker.last_name}', worker=worker, timestamps=timestamps)
 
 @app.route('/approve_vacation', methods=['POST'])
@@ -221,6 +215,7 @@ def decline_vacation():
 
     return redirect(url_for('admin_dashboard'))
 
+# Add the missing endpoint for requesting vacation
 @app.route('/request_vacation', methods=['POST'])
 @login_required
 def request_vacation():
@@ -305,10 +300,11 @@ def worker_dashboard():
             if not clock_in_allowed:
                 flash('Du är för långt från tillåtet område för att checka in.', 'danger')
 
-    timestamps = Timestamp.query.filter_by(user_id=current_user.id).order_by(Timestamp.clock_in.desc()).all()
+    timestamps = Timestamp.query.filter_by(user_id=current_user.id).all()
     vacations = Vacation.query.filter_by(user_id=current_user.id).all()
 
     return render_template('worker_dashboard.html', title='Worker Dashboard', vacation_form=vacation_form, clocked_in=clocked_in, timestamps=timestamps, vacations=vacations)
+
 
 @app.route('/delete_worker/<int:worker_id>', methods=['POST'])
 @login_required
@@ -339,4 +335,4 @@ def delete_geofence(geofence_id):
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host = "0.0.0.0", port=5000 )
