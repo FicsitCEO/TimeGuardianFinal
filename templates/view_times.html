@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% block title %}Tider för {{ worker.first_name }} {{ worker.last_name }}{% endblock %}
 {% block content %}
-<h1>Tider för {{ worker.first_name }} {{ worker.last_name }}</h1>
+<h2>Tider för {{ worker.first_name }} {{ worker.last_name }}</h2>
 <table class="table">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Clock In</th>
-            <th>Clock Out</th>
-            <th>Time Worked</th>
-            <th>Break Duration</th>
-            <th>Lunch Duration</th>
+            <th>Datum</th>
+            <th>Incheckning</th>
+            <th>Utcheckning</th>
+            <th>Arbetad Tid</th>
+            <th>Rasttid</th>
+            <th>Lunchtid</th>
         </tr>
     </thead>
     <tbody>
@@ -23,11 +24,11 @@
                 {{ (timestamp.clock_out - timestamp.clock_in).seconds|format_worked_hours }}
                 {% endif %}
             </td>
-            <td>{{ timestamp.break_duration }} mins</td>
-            <td>{{ timestamp.lunch_duration }} mins</td>
+            <td>{{ timestamp.break_duration }} min</td>
+            <td>{{ timestamp.lunch_duration }} min</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Tillbaka</a>
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-warning">Tillbaka</a>
 {% endblock %}
