@@ -11,9 +11,10 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Registrera')
 
 class LoginForm(FlaskForm):
-    first_name = StringField('Förnamn', validators=[DataRequired(message="Förnamn krävs."), Length(min=2, max=20, message="Förnamnet måste vara mellan 2 och 20 tecken.")])
-    last_name = StringField('Efternamn', validators=[DataRequired(message="Efternamn krävs."), Length(min=2, max=20, message="Efternamnet måste vara mellan 2 och 20 tecken.")])
-    password = PasswordField('Lösenord', validators=[DataRequired(message="Lösenord krävs.")])
+    first_name = StringField('Förnamn', validators=[DataRequired()])
+    last_name = StringField('Efternamn', validators=[DataRequired()])
+    password = PasswordField('Lösenord', validators=[DataRequired()])
+    remember_me = BooleanField('Kom ihåg mig')
     submit = SubmitField('Logga in')
 
 class AdminCodeForm(FlaskForm):
@@ -41,3 +42,4 @@ class GeofenceForm(FlaskForm):
     longitude = StringField('Longitud', validators=[DataRequired(message="Longitud krävs.")])
     radius = StringField('Radie', validators=[DataRequired(message="Radie krävs.")])
     submit = SubmitField('Lägg till Geofence')
+

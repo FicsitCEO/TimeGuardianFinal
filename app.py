@@ -104,12 +104,13 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(first_name=form.first_name.data, last_name=form.last_name.data).first()
         if user and user.password == form.password.data:
-            login_user(user)
+            login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('master_dashboard' if user.role == 'master' else 'admin_dashboard' if user.role == 'admin' else 'worker_dashboard'))
         else:
             flash('Inloggningen misslyckades. Vänligen kontrollera förnamn, efternamn och lösenord.', 'danger')
     return render_template('login.html', title='Logga in', form=form)
+
 
 @app.route('/logout')
 @login_required

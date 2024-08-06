@@ -38,9 +38,9 @@
             </div>
             {% endif %}
         </div>
-        <div class="form-group">
-            <label for="remember">Kom ihåg mig:</label>
-            {{ form.remember }}
+        <div class="form-group form-check">
+            {{ form.remember_me(class="form-check-input") }}
+            <label class="form-check-label" for="remember_me">Kom ihåg mig</label>
         </div>
         <button type="submit" class="btn">Logga in</button>
     </form>
