@@ -81,48 +81,52 @@
     </div>
 
     <div class="section">
-        <h3>Geofences</h3>
-        <form method="POST" action="{{ url_for('admin_dashboard') }}">
-            {{ geofence_form.hidden_tag() }}
-            <div class="form-group">
-                <label for="latitude">Latitude:</label>
-                {{ geofence_form.latitude(class="form-control") }}
-            </div>
-            <div class="form-group">
-                <label for="longitude">Longitude:</label>
-                {{ geofence_form.longitude(class="form-control") }}
-            </div>
-            <div class="form-group">
-                <label for="radius">Radius (meter):</label>
-                {{ geofence_form.radius(class="form-control") }}
-            </div>
-            <button type="submit" class="btn btn-primary">Lägg till geofence</button>
-        </form>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Radius</th>
-                    <th>Åtgärder</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for geofence in geofences %}
-                <tr>
-                    <td>{{ geofence.latitude }}</td>
-                    <td>{{ geofence.longitude }}</td>
-                    <td>{{ geofence.radius }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('delete_geofence', geofence_id=geofence.id) }}"
-                            style="display:inline;">
-                            <button type="submit" class="btn btn-danger">Ta bort</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <h3>
+            <button id="toggle-geofence" class="btn btn-info">Visa Geofencesystemet</button>
+        </h3>
+        <div id="geofence-system" style="display: none;">
+            <form method="POST" action="{{ url_for('admin_dashboard') }}">
+                {{ geofence_form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="latitude">Latitude:</label>
+                    {{ geofence_form.latitude(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="longitude">Longitude:</label>
+                    {{ geofence_form.longitude(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="radius">Radius (meter):</label>
+                    {{ geofence_form.radius(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary">Lägg till geofence</button>
+            </form>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Radius</th>
+                        <th>Åtgärder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for geofence in geofences %}
+                    <tr>
+                        <td>{{ geofence.latitude }}</td>
+                        <td>{{ geofence.longitude }}</td>
+                        <td>{{ geofence.radius }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_geofence', geofence_id=geofence.id) }}"
+                                style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Ta bort</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="section">
@@ -161,4 +165,18 @@
     </div>
 
 </div>
+
+<!-- JavaScript to handle the toggle functionality -->
+<script>
+    document.getElementById('toggle-geofence').addEventListener('click', function () {
+        const geofenceSystem = document.getElementById('geofence-system');
+        if (geofenceSystem.style.display === 'none' || geofenceSystem.style.display === '') {
+            geofenceSystem.style.display = 'block';
+            this.textContent = 'Dölj Geofencesystemet';
+        } else {
+            geofenceSystem.style.display = 'none';
+            this.textContent = 'Visa Geofencesystemet';
+        }
+    });
+</script>
 {% endblock %}
