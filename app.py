@@ -299,16 +299,12 @@ def worker_dashboard():
 @app.route('/delete_worker/<int:worker_id>', methods=['POST'])
 @login_required
 def delete_worker(worker_id):
-    if current_user.role not in ['master', 'admin']:
-        return redirect(url_for('home'))
-
-    worker = User.query.get(worker_id)
-    if worker and worker.role == 'worker' and worker.admin_code == current_user.admin_code:
-        db.session.delete(worker)
-        db.session.commit()
-        flash('Arbetare borttagen framgångsrikt', 'success')
-
+    worker = User.query.get_or_404(worker_id)
+    db.session.delete(worker)
+    db.session.commit()
+    flash('Arbetare borttagen', 'success')
     return redirect(url_for('admin_dashboard'))
+
 
 @app.route('/delete_geofence/<int:geofence_id>', methods=['POST'])
 @login_required
