@@ -250,45 +250,9 @@ footer {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
+/* Add this at the end of your existing CSS */
 .button-group {
     display: flex;
     gap: 10px;
     /* Adjust the gap as needed */
-}
-
-/* Responsive design for mobile devices */
-@media (max-width: 768px) {
-    .table thead {
-        display: none;
-    }
-
-    .table,
-    .table tbody,
-    .table tr,
-    .table td {
-        display: block;
-        width: 100%;
-    }
-
-    .table tr {
-        margin-bottom: 15px;
-        border-bottom: 2px solid #ddd;
-    }
-
-    .table td {
-        text-align: right;
-        padding-left: 50%;
-        position: relative;
-    }
-
-    .table td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        width: calc(50% - 10px);
-        padding-right: 10px;
-        text-align: left;
-        font-weight: bold;
-    }
 }
