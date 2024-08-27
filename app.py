@@ -6,6 +6,7 @@ from forms import RegistrationForm, LoginForm, AdminCodeForm, EditTimestampForm,
 from datetime import datetime
 from geopy.distance import geodesic
 import requests
+from config import Config  # Import the Config class
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -14,8 +15,7 @@ login_manager.login_view = 'login'
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'your_secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    app.config.from_object(Config)  # Apply configuration from Config class
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -26,8 +26,6 @@ def create_app():
         return User.query.get(int(user_id))
 
     return app
-
-app = create_app()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
