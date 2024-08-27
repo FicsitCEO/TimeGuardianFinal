@@ -15,7 +15,8 @@ login_manager.login_view = 'login'
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)  # Apply configuration from Config class
+    app.config['SECRET_KEY'] = 'your_secret_key'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -25,7 +26,16 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    # Register the custom filter with Jinja2
+    @app.template_filter('format_worked_hours')
+    def format_worked_hours(seconds):
+        hours, remainder = divmod(seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+        return f'{hours}h {minutes}m'
+
     return app
+
+app = create_app()
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
