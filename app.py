@@ -5,8 +5,8 @@ from flask_login import LoginManager, login_user, current_user, logout_user, log
 from forms import RegistrationForm, LoginForm, AdminCodeForm, EditTimestampForm, VacationRequestForm, UpdateAdminCodeForm, GeofenceForm
 from datetime import datetime
 from geopy.distance import geodesic
+import os
 import requests
-from config import Config  # Import the Config class
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -16,7 +16,13 @@ login_manager.login_view = 'login'
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    
+    # Use DATABASE_URL environment variable or fallback to SQLite for local development
+    uri = os.getenv('DATABASE_URL', 'sqlite:///site.db')
+    if uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -329,4 +335,4 @@ def delete_geofence(geofence_id):
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
-    app.run(host = "0.0.0.0", port=5000 )
+    app.run(host="0.0.0.0", port=5000)
