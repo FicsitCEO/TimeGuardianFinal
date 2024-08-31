@@ -53,7 +53,6 @@ class User(db.Model, UserMixin):
     
     timestamps = db.relationship('Timestamp', backref='user', lazy=True)
 
-
 class Timestamp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     clock_in = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
